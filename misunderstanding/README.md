@@ -1,7 +1,7 @@
 # 错误用法及误区
 
 ## 当做回调来用 callback hell
-```
+```javascript
 loadAsync1().then(function(data1) {
   loadAsync2(data1).then(function(data2) {
     loadAsync3(data2).then(okFn, failFn)
