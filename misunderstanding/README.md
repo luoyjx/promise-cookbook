@@ -12,7 +12,7 @@ loadAsync1().then(function(data1) {
 Promise是用来解决异步嵌套回调的，这种写法虽然可行，但违背了Promise的设计初衷
 改成下面的写法，会让结构更加清晰
 
-```
+```javascript
 loadAsync1()
   .then(function(data1) {
     return loadAsync2(data1)
@@ -24,7 +24,7 @@ loadAsync1()
 ```
 
 ## 没有返回值
-```
+```javascript
 loadAsync1()
   .then(function(data1) {
     loadAsync2(data1)
@@ -40,7 +40,7 @@ promise 的神奇之处在于让我们能够在回调函数里面使用 return �
 所以在then中可以return出一个promise对象或普通的值，也可以throw出一个错误对象，但如果没有任何返回，将默认返回undefined，那么后面的then中的回调参数接收到的将是undefined，而不是上一个then中内部函数 loadAsync2 执行的结果，后面都将是undefined。
 
 ## 没有catch
-```
+```javascript
 loadAsync1()
   .then(function(data1) {
     return loadAsync2(data1)
@@ -54,7 +54,7 @@ loadAsync1()
 这里的调用，并没有添加catch方法，那么如果中间某个环节发生错误，将不会被捕获，控制台将看不到任何错误，不利于调试查错，所以最好在最后添加catch方法用于捕获错误。
 
 **添加catch**
-```
+```javascript
 loadAsync1()
   .then(function(data1) {
     return loadAsync2(data1)
@@ -70,21 +70,21 @@ loadAsync1()
 ## `catch()`与`then(null, fn)`
 在有些情况下catch与then(null, fn)并不等同，如下
 
-```
+```javascript
 ajaxLoad1()
   .then(res=>{ return ajaxLoad2() })
   .catch(err=> console.log(err))
 ```
 
 此时，catch捕获的并不是ajaxLoad1的错误，而是ajaxLoad2的错误，所以有时候，两者还是要结合起来使用：
-```
+```javascript
 ajaxLoad1()
   .then(res=>{ return ajaxLoad2() }, err=>console.log(err))
   .catch(err=> console.log(err))
 ```
 
 ## 断链 The Broken Chain
-```
+```javascript
 function loadAsyncFnX(){ return Promise.resolve(1); }
 function doSth(){ return 2; }
 function asyncFn(){
@@ -102,7 +102,7 @@ asyncFn().then(res=>console.log(res)).catch(err=>console.log(err))
 
 改写如下
 
-```
+```javascript
 function loadAsyncFnX(){ return Promise.resolve(1); }
 function doSth(){ return 2; }
 function asyncFn(){
@@ -116,7 +116,7 @@ asyncFn().then(res=>console.log(res)).catch(err=>console.log(err))
 ```
 
 ## 穿透 Fall Through
-```
+```javascript
 new Promise(resolve=>resolve(8))
   .then(1)
   .catch(null)
@@ -130,7 +130,7 @@ new Promise(resolve=>resolve(8))
 ## 长度未知的串行与并行
 并行执行
 
-```
+```javascript
 getAsyncArr()
   .then(promiseArr=>{
     var resArr = [];
@@ -144,7 +144,7 @@ getAsyncArr()
 
 使用forEach遍历执行promise，在上面的实现中，第二个then有可能拿到的是空的结果或者不完整的结果，因为，第二个then的回调无法预知 promiseArr 中每一个promise是否都执行完成，那么这里可以使用 Promise.all 结合 map 方法去改善
 
-```
+```javascript
 getAsyncArr()
   .then(promiseArr=>{
     return Promise.all(promiseArr);
@@ -154,7 +154,7 @@ getAsyncArr()
 
 如果需要串行执行，那和我们可以利用数据的reduce来处理串行执行
 
-```
+```javascript
 var pA = [
   function(){return new Promise(resolve=>resolve(1))},
   function(data){return new Promise(resolve=>resolve(1+data))},
@@ -173,7 +173,7 @@ pA.reduce((prev, next)=>prev.then(next).then(res=>res),Promise.resolve())
 要求是 `thenable` 对象所拥有的 `then` 方法应该和 `Promise` 所拥有的 `then` 方法具有同样的功能和处理过程。
 一个标准的 `thenable` 对象应该是这样的
 
-```
+```javascript
 var thenable = {
   then: function(resolve, reject) {
     resolve(42);
@@ -183,7 +183,7 @@ var thenable = {
 
 使用 Promise.resolve转换
 
-```
+```javascript
 Promise.resolve(thenable).then(function(value) {
   console.log(value);  // 42
 });
@@ -193,7 +193,7 @@ Promise.resolve(thenable).then(function(value) {
 
 jQueyr的defer对象转换为ES6 Promise对象
 
-```
+```javascript
 Promise.resolve($.ajax('api/data.json')).then(res=>console.log(res)))
 ```
 
