@@ -11,7 +11,7 @@ var RESOLVED = 'Fulfilled'
 var REJECTED = 'Rejected'
 
 // resolver为 function(resolve, reject) { ... }
-function Promise (resolver) {
+function Promise0 (resolver) {
   if (resolver && typeof resolver !== 'function') { throw new Error('Promise resolver is not a function') }
   // 当前promise对象的状态
   this.state = PENDING
@@ -23,7 +23,7 @@ function Promise (resolver) {
   if (resolver) executeResolver.call(this, resolver)
 }
 
-Promise.prototype.then = function () {}
+Promise0.prototype.then = function () {}
 
 // 用于执行 new Promise(function(resolve, reject) {}) 中的resolve或reject方法
 function executeResolver (resolver) {
@@ -38,7 +38,7 @@ function executeResolver (resolver) {
     executeCallback.bind(_this)('reject', value)
   }
 
-  function onSuccess(value) {
+  function onSuccess (value) {
     if (called) { return }
     called = true
     // [标准 2.3.3.3.1] 如果是成功 使用resolve方法
@@ -56,7 +56,7 @@ function executeResolver (resolver) {
 
 // 用于执行成功或失败的回调 new Promise((resolve, reject) => { resolve(1)或 reject(1) })
 function executeCallback (type, x) {
-  var isResolve = type === 'reoslve'
+  var isResolve = type === 'resolve'
   var thenable = null
   // [标准 2.3.3] 如果x是一个对象或一个函数
   if (isResolve && (typeof x === 'object' || typeof x === 'function')) {
