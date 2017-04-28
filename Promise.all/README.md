@@ -7,7 +7,7 @@
 * all() 的返回值也是新的Promise对象
 
 ## 正确的实现
-```
+```javascript
 Promise.all = function(iterable){
   var _this = this;
   return new this(function(resolve, reject){
@@ -40,7 +40,7 @@ Promise.all = function(iterable){
 那么结果就是数组里的promise谁先成功，谁的结果就占据了第一个位置，就算这个promise是数组的最后一个
 
 ## 错误的实现
-```
+```javascript
 Promise.all = function(iterable){
   var _this = this;
   return new this(function(resolve, reject){

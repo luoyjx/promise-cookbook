@@ -20,7 +20,7 @@ learn how to cook promise
 
 ### `Promise.all`
 
-```
+```javascript
 Promise.all = function(iterable){
   var _this = this;
   return new this(function(resolve, reject){
@@ -43,6 +43,37 @@ Promise.all = function(iterable){
           }
         })
       })(i)
+    })
+  })
+}
+```
+
+## `Promise.race`
+
+用于并行执行promise组成的数组（数组中可以不是Promise对象，
+在调用过程中会使用 `Promise.resolve(value)` 转换成Promise对象），如果某个promise的状态率先改变，
+就获得改变的结果，返回一个新的Promise对象
+
+```javascript
+Promise.race = function(iterable){
+  var _this = this;
+  return new this(function(resolve, reject){
+    if(!iterable || !Array.isArray(iterable)) return reject( new TypeError('must be an array') );
+    var len = iterable.length;
+    if(!len) return resolve([]);
+    var called = false;
+    iterable.forEach(function(v, i){
+      _this.resolve(v).then(function(res){
+        if(!called){
+          called = true;
+          return resolve(res);
+        }
+      }, function(err){
+        if(!called){
+          called = true;
+          return reject(err);
+        }
+      })
     })
   })
 }
