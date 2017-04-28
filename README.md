@@ -78,3 +78,25 @@ Promise.race = function(iterable){
   })
 }
 ```
+
+## `Promise.resolve`
+
+用于包装任意对象为promise对象，返回一个新的promise,并且状态是resolved
+
+```javascript
+Promise.resolve = function(value){
+  if(value instanceof this) return value;
+  return executeCallback.bind(new this())('resolve', value);
+}
+```
+
+## `Promise.reject`
+
+用于包装任意对象为promise对象，返回一个新的promise,并且状态是rejected
+
+```javascript
+Promise.reject = function(value){
+  if(value instanceof this) return value;
+  return executeCallback.bind(new this())('reject', value);
+}
+```
